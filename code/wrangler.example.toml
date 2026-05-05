@@ -1,0 +1,35 @@
+name = "attributor"
+main = "src/index.ts"
+compatibility_date = "2025-01-15"
+compatibility_flags = ["nodejs_compat"]
+
+# Custom domain — uncomment and set after first deploy, or bind from the dashboard.
+# [[routes]]
+# pattern = "attrs.your-domain.com"
+# custom_domain = true
+
+# D1 binding — `make setup` patches database_id after `wrangler d1 create`.
+[[d1_databases]]
+binding = "DB"
+database_name = "attribution"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+# Weekly cleanup. Worker runs cleanup.sql against D1 every Sunday 03:00 UTC.
+# Uncomment after first deploy if you want automated retention.
+# [triggers]
+# crons = ["0 3 * * 0"]
+
+[observability.logs]
+enabled = true
+invocation_logs = true
+
+# Public vars — safe to commit. Edit to add/remove apps without code changes.
+[vars]
+APPS_CONFIG = '''{
+  "com.example.app": {"ttl_days": 7, "max_referrer_len": 64, "referrer_pattern": "^[a-z0-9_-]+$"}
+}'''
+ALLOWED_ORIGINS = "https://your-install-page.example.com"
+DASHBOARD_USER = "admin"
+
+# Secrets (set via `wrangler secret put NAME` or the Cloudflare dashboard):
+#   DASHBOARD_PASS  — Basic-auth password for /dashboard

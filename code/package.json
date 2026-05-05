@@ -1,0 +1,20 @@
+{
+  "name": "attributor",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --local",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail",
+    "db:apply:local": "wrangler d1 execute attribution --local --file=./schema.sql",
+    "db:apply:remote": "wrangler d1 execute attribution --remote --file=./schema.sql",
+    "db:cleanup:remote": "wrangler d1 execute attribution --remote --file=./cleanup.sql",
+    "cf-typegen": "wrangler types"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250115.0",
+    "typescript": "^5.5.0",
+    "wrangler": "^3.95.0"
+  }
+}

@@ -1,0 +1,18 @@
+# env / secrets — never commit
+.env
+.dev.vars
+
+# setup wizard progress
+.setup-state
+
+# wrangler / cloudflare
+.wrangler/
+code/.wrangler/
+code/node_modules/
+code/dist/
+code/worker-configuration.d.ts
+code/wrangler.toml
+
+# OS
+.DS_Store
+*.log

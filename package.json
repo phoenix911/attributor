@@ -1,0 +1,8 @@
+{
+  "name": "attributor",
+  "private": true,
+  "scripts": {
+    "build": "cd code && npm install",
+    "deploy": "cd code && npm install && cd .. && npx wrangler deploy"
+  }
+}

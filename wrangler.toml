@@ -1,0 +1,25 @@
+# Root wrangler.toml — used by the "Deploy to Cloudflare" button.
+# After deploy: clone the repo and run `make setup` to apply the D1 schema and
+# wire your domain. The button creates the Worker + D1 binding from this file;
+# schema/secrets are applied by the wizard.
+
+name = "attributor"
+main = "code/src/index.ts"
+compatibility_date = "2025-01-15"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "attribution"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+[observability.logs]
+enabled = true
+invocation_logs = true
+
+[vars]
+APPS_CONFIG = '''{
+  "com.example.app": {"ttl_days": 7, "max_referrer_len": 64, "referrer_pattern": "^[a-z0-9_-]+$"}
+}'''
+ALLOWED_ORIGINS = "https://your-install-page.example.com"
+DASHBOARD_USER = "admin"

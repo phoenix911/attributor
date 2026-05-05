@@ -1,0 +1,4 @@
+# Copy to code/.dev.vars for local `wrangler dev` runs.
+# Production secrets are set via `wrangler secret put NAME` or the Cloudflare dashboard.
+
+DASHBOARD_PASS=replace-with-a-strong-password
