@@ -29,7 +29,7 @@ first app launch    →  POST /match   →  matched referrer
 - **Android:** Play Install Referrer carries your `click_id` — ~100% match.
 - **iOS:** fingerprint match on IP + UA + locale + TZ + screen + ASN — ~80–88% match.
 - **Multi-app:** one Worker handles many apps via `APPS_CONFIG`.
-- **$5/month flat** on Workers Paid up to ~1.6M clicks/day. Free tier covers ~3,300/day.
+- **$5/month flat** on Workers Paid up to ~1.6M clicks/day. Free tier covers ~3,300/day — see below.
 
 ---
 
@@ -84,6 +84,26 @@ APPS_CONFIG = '''{
 ```
 
 Then `make deploy`. No code change. Or edit it in the Cloudflare dashboard under **Variables and Secrets** for live changes without a redeploy.
+
+---
+
+## Free tier limits
+
+attributor runs fine on Cloudflare's free plan for small apps. Each install-page visit costs **1 Worker request + 1 D1 write**, and each first-launch match costs **1 Worker request + 1 D1 read + 1 D1 write**.
+
+| Resource | Free plan | Workers Paid ($5/mo) | What it limits |
+|---|---|---|---|
+| Worker requests | **100,000 / day** | 10M / month included, then $0.30 per 1M | Total `/click` + `/match` calls |
+| Worker CPU time | 10 ms / invocation | 30 s / invocation | Plenty — each handler runs in <5 ms |
+| D1 rows written | **100,000 / day** | 50M / month included | Each click and match writes 1 row |
+| D1 rows read | 5M / day | 25B / month | `/match` scans recent clicks per app |
+| D1 storage | 5 GB total | 5 GB included, $0.75/GB after | 14-day clicks + 90-day matches stays well under 1 GB for most apps |
+
+**Practical ceiling on the free plan:** the binding constraint is the **100k D1 writes/day** — each `/click` and each `/match` writes one row, so you get ~50,000 click+match pairs per day before D1 throttles. The Worker request limit (also 100k/day) hits the same wall.
+
+If you're under that, you pay **$0**. Above it, flip to Workers Paid — the next ceiling is far away (16M+ click+match pairs per day before any per-million overages).
+
+> Numbers above are Cloudflare's published limits as of early 2026 — re-check [workers pricing](https://developers.cloudflare.com/workers/platform/pricing/) and [D1 pricing](https://developers.cloudflare.com/d1/platform/pricing/) for the current values.
 
 ---
 
